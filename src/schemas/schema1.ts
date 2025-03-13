@@ -30,9 +30,6 @@ export const schema1 = {
                 "Other"
             ]
         },
-        "provideAddress": {
-            "type": "boolean"
-        },
         "address": {
             "type": "object",
             "properties": {
@@ -110,14 +107,6 @@ export const uischema1 = {
                         }
                     ]
                 },
-                {
-                    "type": "Control",
-                    "scope": "#/properties/provideAddress"
-                },
-                {
-                    "type": "Control",
-                    "scope": "#/properties/vegetarian"
-                }
             ]
         },
         {
@@ -151,15 +140,6 @@ export const uischema1 = {
                     ]
                 }
             ],
-            "rule": {
-                "effect": "SHOW",
-                "condition": {
-                    "scope": "#/properties/provideAddress",
-                    "schema": {
-                        "const": true
-                    }
-                }
-            }
         },
         {
             "type": "Category",
@@ -169,38 +149,11 @@ export const uischema1 = {
                     "type": "Control",
                     "scope": "#/properties/vegetarianOptions/properties/vegan"
                 },
-                {
-                    "type": "Control",
-                    "scope": "#/properties/vegetarianOptions/properties/favoriteVegetable"
-                },
-                {
-                    "type": "Control",
-                    "scope": "#/properties/vegetarianOptions/properties/otherFavoriteVegetable",
-                    "rule": {
-                        "effect": "SHOW",
-                        "condition": {
-                            "scope": "#/properties/vegetarianOptions/properties/favoriteVegetable",
-                            "schema": {
-                                "const": "Other"
-                            }
-                        }
-                    }
-                }
             ],
-            "rule": {
-                "effect": "SHOW",
-                "condition": {
-                    "scope": "#/properties/vegetarian",
-                    "schema": {
-                        "const": true
-                    }
-                }
-            }
         }
     ]
 };
 
 export const initialData1 = {
-    "provideAddress": true,
-    "vegetarian": false,
+
 };

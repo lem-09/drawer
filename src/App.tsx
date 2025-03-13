@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers } from '@jsonforms/material-renderers';
 import { Drawer, Button } from 'antd';
-import { ProLayout } from '@ant-design/pro-components';
 import 'antd/dist/reset.css';
 
 import { schema1, uischema1, initialData1 } from "./schemas/schema1";
+import { schema2, uischema2, initialData2 } from "./schemas/schema2";
 
 const App: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); //drawer
 
   const toggleDrawer = () => setOpen(!open);
 
@@ -25,6 +25,13 @@ const App: React.FC = () => {
             uischema={uischema1}
             data={initialData1}
             renderers={materialRenderers}
+        />
+
+        <JsonForms
+          schema={schema2}
+          uischema={uischema2}
+          data={initialData2}
+          renderers={materialRenderers}
         />
       </div>
   );
