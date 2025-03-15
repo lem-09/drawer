@@ -1,4 +1,4 @@
-export const schema1 = {
+export const schema1Basic = {
     "type": "object",
     "properties": {
         "firstName": {
@@ -11,9 +11,6 @@ export const schema1 = {
             "minLength": 3,
             "description": "Please enter your second name"
         },
-        "vegetarian": {
-            "type": "boolean"
-        },
         "birthDate": {
             "type": "string",
             "format": "date",
@@ -21,139 +18,85 @@ export const schema1 = {
         },
         "nationality": {
             "type": "string",
-            "enum": [
-                "DE",
-                "IT",
-                "JP",
-                "US",
-                "RU",
-                "Other"
-            ]
-        },
-        "address": {
-            "type": "object",
-            "properties": {
-                "street": {
-                    "type": "string"
-                },
-                "streetNumber": {
-                    "type": "string"
-                },
-                "city": {
-                    "type": "string"
-                },
-                "postalCode": {
-                    "type": "string",
-                    "maxLength": 5
-                }
-            }
-        },
-        "vegetarianOptions": {
-            "type": "object",
-            "properties": {
-                "vegan": {
-                    "type": "boolean"
-                },
-                "favoriteVegetable": {
-                    "type": "string",
-                    "enum": [
-                        "Tomato",
-                        "Potato",
-                        "Salad",
-                        "Aubergine",
-                        "Cucumber",
-                        "Other"
-                    ]
-                },
-                "otherFavoriteVegetable": {
-                    "type": "string"
-                }
-            }
+            "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
         }
     }
-
 };
 
-export const uischema1 = {
-    "type": "Categorization",
+export const uischema1Basic = {
+    "type": "VerticalLayout",
     "elements": [
         {
-            "type": "Category",
-            "label": "BASIC",
-            "elements": [
-                {
-                    "type": "HorizontalLayout",
-                    "elements": [
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/firstName"
-                        },
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/secondName"
-                        }
-                    ]
-                },
-                {
-                    "type": "HorizontalLayout",
-                    "elements": [
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/birthDate"
-                        },
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/nationality"
-                        }
-                    ]
-                },
-            ]
+            "type": "Control",
+            "scope": "#/properties/firstName"
         },
         {
-            "type": "Category",
-            "label": "ADDRESS",
-            "elements": [
-                {
-                    "type": "HorizontalLayout",
-                    "elements": [
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/address/properties/street"
-                        },
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/address/properties/streetNumber"
-                        }
-                    ]
-                },
-                {
-                    "type": "HorizontalLayout",
-                    "elements": [
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/address/properties/city"
-                        },
-                        {
-                            "type": "Control",
-                            "scope": "#/properties/address/properties/postalCode"
-                        }
-                    ]
-                }
-            ],
+            "type": "Control",
+            "scope": "#/properties/secondName"
         },
         {
-            "type": "Category",
-            "label": "Additional",
-            "elements": [
-                {
-                    "type": "Control",
-                    "scope": "#/properties/vegetarianOptions/properties/vegan"
-                },
-            ],
+            "type": "Control",
+            "scope": "#/properties/birthDate"
+        },
+        {
+            "type": "Control",
+            "scope": "#/properties/nationality"
         }
     ]
 };
 
-export const initialData1 = {
-
+export const schema1Address = {
+    "type": "object",
+    "properties": {
+        "street": {
+            "type": "string"
+        },
+        "streetNumber": {
+            "type": "string"
+        },
+        "city": {
+            "type": "string"
+        },
+        "postalCode": {
+            "type": "string",
+            "maxLength": 5
+        }
+    }
 };
+
+export const uischema1Address = {
+    "type": "VerticalLayout",
+    "elements": [
+        {
+            "type": "Control",
+            "scope": "#/properties/street"
+        },
+        {
+            "type": "Control",
+            "scope": "#/properties/streetNumber"
+        },
+        {
+            "type": "Control",
+            "scope": "#/properties/city"
+        },
+        {
+            "type": "Control",
+            "scope": "#/properties/postalCode"
+        }
+    ]
+};
+
+export const schema1Additional = {
+    "type": "object",
+    "properties": {
+        "vegan": {
+            "type": "boolean"
+        }
+    }
+};
+
+export const uischema1Additional = {
+    "type": "Control",
+    "scope": "#/properties/vegan"
+};
+export const initialData1 = {};
