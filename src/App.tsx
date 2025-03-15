@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ProLayout from '@ant-design/pro-layout';
 import { Layout, Button, Drawer, List, Typography } from 'antd';
-import { AppstoreOutlined } from '@ant-design/icons';
+import {UserOutlined, TeamOutlined, PlusOutlined, EnvironmentOutlined, LaptopOutlined  } from '@ant-design/icons';
 import 'antd/dist/reset.css';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers } from '@jsonforms/material-renderers';
@@ -17,32 +17,29 @@ type FormCategory = {
     label: string;
     schema: object;
     uischema: UISchemaElement;
+    icon: React.ReactNode;
 };
 type FormSchema = {
     title: string;
     categories: FormCategory[];
 };
-
-
-
 const formSchemas: FormSchema[] = [
     {
         title: 'Personal information',
         categories: [
-            { label: 'Basic', schema: schema1Basic, uischema: uischema1Basic },
-            { label: 'Address', schema: schema1Address, uischema: uischema1Address },
-            { label: 'Additional', schema: schema1Additional, uischema: uischema1Additional },
+            { label: 'Basic', schema: schema1Basic, uischema: uischema1Basic, icon: <UserOutlined />},
+            { label: 'Address', schema: schema1Address, uischema: uischema1Address, icon: <EnvironmentOutlined/> },
+            { label: 'Additional', schema: schema1Additional, uischema: uischema1Additional, icon: <PlusOutlined/> },
         ],
     },
     {
         title: 'Job',
         categories: [
-            { label: 'Job Details', schema: schema2JobDetails, uischema: uischema2JobDetails },
-            { label: 'Management', schema: schema2Manager, uischema: uischema2Manager },
+            { label: 'Job Details', schema: schema2JobDetails, uischema: uischema2JobDetails, icon: <LaptopOutlined/> },
+            { label: 'Management', schema: schema2Manager, uischema: uischema2Manager, icon: <TeamOutlined/> },
         ],
     },
 ];
-
 
 const App: React.FC = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -101,7 +98,7 @@ const App: React.FC = () => {
                                         onClick={() => handleCategorySelect(formIndex, categoryIndex)}
                                     >
                                         <List.Item.Meta
-                                            avatar={<AppstoreOutlined style={{ fontSize: '18px', color: '#1677ff' }} />}
+                                            avatar={category.icon}
                                             title={category.label}
                                         />
                                     </List.Item>
