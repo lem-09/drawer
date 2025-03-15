@@ -31,16 +31,20 @@ const formSchemas = [
 
 const App: React.FC = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [activeFormIndex] = useState(0);
-    const [activeCategoryIndex, setActiveCategoryIndex] = useState(0);
+    const [activeFormIndex, setActiveFormIndex] = useState(0);
 
-    const handleCategorySelect = (categoryIndex: number) => {
-        setActiveCategoryIndex(categoryIndex);
+    const [activeCategoryIndexes, setActiveCategoryIndexes] = useState<number[]>(new Array(formSchemas.length).fill(0));
+
+    const handleCategorySelect = (formIndex: number, categoryIndex: number) => {
+        setActiveFormIndex(formIndex);
+        const newCategoryIndexes = [...activeCategoryIndexes];
+        newCategoryIndexes[formIndex] = categoryIndex;
+        setActiveCategoryIndexes(newCategoryIndexes);
         setDrawerOpen(false);
     };
 
     const activeForm = formSchemas[activeFormIndex];
-    const activeCategory = activeForm.categories[activeCategoryIndex];
+    const activeCategory = activeForm.categories[activeCategoryIndexes[activeFormIndex]];
 
     return (
         <ProLayout
@@ -64,8 +68,8 @@ const App: React.FC = () => {
 
                             <CategorizationRenderer
                                 categories={form.categories}
-                                activeCategoryIndex={activeCategoryIndex}
-                                onSelect={handleCategorySelect}
+                                activeCategoryIndex={activeCategoryIndexes[formIndex]}
+                                onSelect={(categoryIndex) => handleCategorySelect(formIndex, categoryIndex)}
                             />
                         </div>
                     ))}
