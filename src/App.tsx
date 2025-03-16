@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ProLayout from '@ant-design/pro-layout';
-import { Layout, Button, Drawer, List, Typography, Flex } from 'antd';
-import { UserOutlined, TeamOutlined, PlusOutlined, EnvironmentOutlined, LaptopOutlined, HomeOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { Layout, Button, Drawer, List, Typography, Flex, Grid } from 'antd';
+import { UserOutlined, TeamOutlined, PlusOutlined, EnvironmentOutlined, LaptopOutlined, HomeOutlined } from '@ant-design/icons';
 import 'antd/dist/reset.css';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers } from '@jsonforms/material-renderers';
@@ -12,6 +12,7 @@ import { UISchemaElement } from '@jsonforms/core';
 
 const { Content } = Layout;
 const { Title } = Typography;
+const { useBreakpoint } = Grid;
 
 type FormCategory = {
     label: string;
@@ -43,6 +44,9 @@ const formSchemas: FormSchema[] = [
 ];
 
 const App: React.FC = () => {
+    const screens = useBreakpoint();
+    const isMobile = !screens.md;
+
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeFormIndex, setActiveFormIndex] = useState(0);
     const [activeCategoryIndexes, setActiveCategoryIndexes] = useState<number[]>(new Array(formSchemas.length).fill(0));
@@ -77,8 +81,7 @@ const App: React.FC = () => {
             contentStyle={{ padding: 20, transition: 'margin-left 0.3s ease' }}
 
             headerContentRender={() => (
-                <Flex align="left" style={{ width: '100%', justifyContent: 'center' }}>
-                    <span></span>
+                <Flex align="center" style={{ width: '100%', justifyContent: 'center' }}>
                     {!showIntro ? (
                         <Title level={4} style={{ margin: 0, color: '#2d4e98' }}>
                             {activeForm.title}
@@ -90,7 +93,6 @@ const App: React.FC = () => {
                     )}
                 </Flex>
             )}
-
         >
             <Layout style={{ display: 'flex', flexDirection: 'row' }}>
                 <Drawer
@@ -115,7 +117,7 @@ const App: React.FC = () => {
                     closable
                     onClose={() => setDrawerOpen(false)}
                     open={drawerOpen}
-                    width={320}
+                    width={isMobile ? '40vw' : 320}
                     style={{ backgroundColor: '#d9deef' }}
                 >
                     {formSchemas.map((form, formIndex) => (
@@ -151,26 +153,26 @@ const App: React.FC = () => {
                 <Content
                     style={{
                         flex: 1,
-                        marginLeft: drawerOpen ? 320 : 0,
-                        width: `calc(100% - ${drawerOpen ? 320 : 0}px)`,
+                        marginLeft: isMobile ? 40 : drawerOpen ? 320 : 0,
+                        width: isMobile ? `calc(100% - ${drawerOpen ? 40 : 0}vw)` : `calc(100% - ${drawerOpen ? 320 : 0}px)`,
                         transition: 'all 0.3s ease',
                     }}
                 >
-                    {!drawerOpen && !showIntro && (
-                        <Button type="primary" onClick={() => setDrawerOpen(true)} style={{ marginBottom: 20 , backgroundColor: '#3d5b95' }} >
+
+                {!drawerOpen && !showIntro && (
+                        <Button type="primary" onClick={() => setDrawerOpen(true)} style={{ marginBottom: 20, backgroundColor: '#3d5b95' }}>
                             Open drawer
                         </Button>
                     )}
 
                     {showIntro ? (
-                        <div style={{ textAlign: 'center', paddingTop: '10%' }}>
+                        <div style={{ textAlign: 'center', padding: '5vh 5vw' }}>
                             <Title level={1} style={{ color: '#2d4e98' }}>Welcome to the Management Interface</Title>
                             <h2>Manage your personal and professional information easily !</h2>
-                            <Button type="primary" size="large" onClick={() => setDrawerOpen(true)} style={{ backgroundColor: '#3d5b95' , marginTop: '200px'}}>
+                            <Button type="primary" size="large" onClick={() => setDrawerOpen(true)} style={{ backgroundColor: '#3d5b95', marginTop: '50px' }}>
                                 Get Started
                             </Button>
                         </div>
-
                     ) : (
                         <>
                             <Title level={1} style={{ color: '#2d4e98' }}>{activeCategory.label}</Title>
