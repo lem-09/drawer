@@ -25,6 +25,7 @@ type FormSchema = {
     title: string;
     categories: FormCategory[];
 };
+
 const formSchemas: FormSchema[] = [
     {
         title: 'Personal information',
@@ -79,15 +80,14 @@ const App: React.FC = () => {
             layout="top"
             siderWidth={0}
             contentStyle={{ padding: 20, transition: 'margin-left 0.3s ease' }}
-
             headerContentRender={() => (
                 <Flex align="center" style={{ width: '100%', justifyContent: 'center' }}>
                     {!showIntro ? (
-                        <Title level={4} style={{ margin: 0, color: '#2d4e98' }}>
+                        <Title level={isMobile ? 5 : 4} style={{ margin: 0, color: '#2d4e98' }}>
                             {activeForm.title}
                         </Title>
                     ) : (
-                        <Title level={4} style={{ margin: 0, color: '#2d4e98' }}>
+                        <Title level={isMobile ? 5 : 4} style={{ margin: 0, color: '#2d4e98' }}>
                             Home
                         </Title>
                     )}
@@ -98,11 +98,7 @@ const App: React.FC = () => {
                 <Drawer
                     title={
                         <Flex justify="space-between" align="center">
-                            {isMobile ? (
-                                <h4>Menu</h4>
-                                ) : (
-                                <h2>Menu</h2>
-                            )}
+                            <h4>Menu</h4>
                             {!showIntro && (
                                 <Button
                                     type="primary"
@@ -126,7 +122,7 @@ const App: React.FC = () => {
                 >
                     {formSchemas.map((form, formIndex) => (
                         <div key={formIndex} style={{ marginBottom: 20 }}>
-                            <Title level={4} style={{ color: '#2d4e98' }}>
+                            <Title level={isMobile ? 5 : 4} style={{ color: '#2d4e98' }}>
                                 {form.title}
                             </Title>
 
@@ -157,29 +153,22 @@ const App: React.FC = () => {
                 <Content
                     style={{
                         flex: 1,
-                        marginLeft: isMobile && drawerOpen ? 200 : drawerOpen ? 320 : 0,
+                        marginLeft: drawerOpen ? (isMobile ? '40vw' : '320px') : 0,
                         width: isMobile ? `calc(100% - ${drawerOpen ? 40 : 0}vw)` : `calc(100% - ${drawerOpen ? 320 : 0}px)`,
                         transition: 'all 0.3s ease',
                     }}
                 >
-
-                {!drawerOpen && !showIntro && (
-                        <Button type="primary" onClick={() => setDrawerOpen(true)} style={{ marginBottom: 20, backgroundColor: '#3d5b95' }}>
-                            Open drawer
-                        </Button>
-                    )}
-
                     {showIntro ? (
-                        <div style={{ textAlign: 'center', padding: '5vh 5vw' }}>
-                            <Title level={1} style={{ color: '#2d4e98' }}>Welcome to the Management Interface</Title>
-                            <h2>Manage your personal and professional information easily !</h2>
+                        <div style={{ textAlign: 'center', paddingTop: '10%' }}>
+                            <Title level={isMobile ? 4 : 1} style={{ color: '#2d4e98' }}>Welcome to the Management Interface</Title>
+                            <h2>Manage your personal and professional information easily!</h2>
                             <Button type="primary" size="large" onClick={() => setDrawerOpen(true)} style={{ backgroundColor: '#3d5b95', marginTop: '50px' }}>
                                 Get Started
                             </Button>
                         </div>
                     ) : (
                         <>
-                            <Title level={1} style={{ color: '#2d4e98' }}>{activeCategory.label}</Title>
+                            <Title level={isMobile ? 4 : 1} style={{ color: '#2d4e98' }}>{activeCategory.label}</Title>
                             <JsonForms
                                 schema={activeCategory.schema}
                                 uischema={activeCategory.uiSchema}
