@@ -6,8 +6,8 @@ import 'antd/dist/reset.css';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers } from '@jsonforms/material-renderers';
 
-import { schema1Basic, schema1Address, schema1Additional, uischema1Basic, uischema1Additional, uischema1Address } from './schemas/schema1';
-import { schema2JobDetails, schema2Manager, uischema2JobDetails, uischema2Manager } from './schemas/schema2';
+import { schema1Basic, schema1Address, schema1Additional, uischema1Basic, uischema1Additional, uischema1Address, initialData1 } from './schemas/schema1';
+import { schema2JobDetails, schema2Manager, uischema2JobDetails, uischema2Manager, initialData2 } from './schemas/schema2';
 import {UISchemaElement} from "@jsonforms/core";
 
 const { Content } = Layout;
@@ -16,7 +16,8 @@ const { Title } = Typography;
 type FormCategory = {
     label: string;
     schema: object;
-    uischema: UISchemaElement;
+    uiSchema: UISchemaElement;
+    initialData: any;
     icon: React.ReactNode;
 };
 type FormSchema = {
@@ -27,16 +28,16 @@ const formSchemas: FormSchema[] = [
     {
         title: 'Personal information',
         categories: [
-            { label: 'Basic', schema: schema1Basic, uischema: uischema1Basic, icon: <UserOutlined />},
-            { label: 'Address', schema: schema1Address, uischema: uischema1Address, icon: <EnvironmentOutlined/> },
-            { label: 'Additional', schema: schema1Additional, uischema: uischema1Additional, icon: <PlusOutlined/> },
+            { label: 'Basic', schema: schema1Basic, uiSchema: uischema1Basic, initialData: initialData1,  icon: <UserOutlined />},
+            { label: 'Address', schema: schema1Address, uiSchema: uischema1Address, initialData: initialData1, icon: <EnvironmentOutlined/> },
+            { label: 'Additional', schema: schema1Additional, uiSchema: uischema1Additional, initialData: initialData1, icon: <PlusOutlined/> },
         ],
     },
     {
         title: 'Job',
         categories: [
-            { label: 'Job Details', schema: schema2JobDetails, uischema: uischema2JobDetails, icon: <LaptopOutlined/> },
-            { label: 'Management', schema: schema2Manager, uischema: uischema2Manager, icon: <TeamOutlined/> },
+            { label: 'Job Details', schema: schema2JobDetails, uiSchema: uischema2JobDetails, initialData: initialData2, icon: <LaptopOutlined/> },
+            { label: 'Management', schema: schema2Manager, uiSchema: uischema2Manager, initialData: initialData2, icon: <TeamOutlined/> },
         ],
     },
 ];
@@ -45,6 +46,17 @@ const App: React.FC = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeFormIndex, setActiveFormIndex] = useState(0);
     const [activeCategoryIndexes, setActiveCategoryIndexes] = useState<number[]>(new Array(formSchemas.length).fill(0));
+
+    // saving form data
+    const [formData, setFormData] = useState(
+        formSchemas.map((form) => form.categories.map((category) => ({ ...category.initialData })))
+    );
+
+    const handleChange = (newData: any) => {
+        const updatedData = [...formData];
+        updatedData[activeFormIndex][activeCategoryIndexes[activeFormIndex]] = newData;
+        setFormData(updatedData);
+    };
 
     const handleCategorySelect = (formIndex: number, categoryIndex: number) => {
         setActiveFormIndex(formIndex);
@@ -122,8 +134,9 @@ const App: React.FC = () => {
 
                     <JsonForms
                         schema={activeCategory.schema}
-                        uischema={activeCategory.uischema}
-                        data={{}}
+                        uischema={activeCategory.uiSchema}
+                        data={formData[activeFormIndex][activeCategoryIndexes[activeFormIndex]]}
+                        onChange={({data})=>handleChange(data)}
                         renderers={materialRenderers}
                     />
                 </Content>
