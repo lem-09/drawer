@@ -43,7 +43,7 @@ const formSchemas: FormSchema[] = [
 ];
 
 const App: React.FC = () => {
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(true);
     const [activeFormIndex, setActiveFormIndex] = useState(0);
     const [activeCategoryIndexes, setActiveCategoryIndexes] = useState<number[]>(new Array(formSchemas.length).fill(0));
 
@@ -51,7 +51,6 @@ const App: React.FC = () => {
     const [formData, setFormData] = useState(
         formSchemas.map((form) => form.categories.map((category) => ({ ...category.initialData })))
     );
-
     const handleChange = (newData: any) => {
         const updatedData = [...formData];
         updatedData[activeFormIndex][activeCategoryIndexes[activeFormIndex]] = newData;
@@ -63,7 +62,7 @@ const App: React.FC = () => {
         const newCategoryIndexes = [...activeCategoryIndexes];
         newCategoryIndexes[formIndex] = categoryIndex;
         setActiveCategoryIndexes(newCategoryIndexes);
-        setDrawerOpen(false);
+        //setDrawerOpen(false);
     };
 
     const activeForm = formSchemas[activeFormIndex];
@@ -128,9 +127,12 @@ const App: React.FC = () => {
                         transition: 'all 0.3s ease',
                     }}
                 >
-                    <Button type="primary" onClick={() => setDrawerOpen(true)} style={{ marginBottom: 20 }}>
-                        Open drawer
-                    </Button>
+
+                    {!drawerOpen && (
+                        <Button type="primary" onClick={() => setDrawerOpen(true)} style={{ marginBottom: 20 }}>
+                            Open drawer
+                        </Button>
+                    )}
 
                     <JsonForms
                         schema={activeCategory.schema}

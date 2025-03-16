@@ -89,14 +89,26 @@ export const uischema1Address = {
 export const schema1Additional = {
     "type": "object",
     "properties": {
-        "vegan": {
-            "type": "boolean"
+        "hobbies": {
+            "type": "string",
+            "description": "Enter your hobbies (comma-separated)"
         }
     }
 };
 
 export const uischema1Additional = {
-    "type": "Control",
-    "scope": "#/properties/vegan"
+    "type": "VerticalLayout",
+    "elements": [
+        {
+            "type": "Control",
+            "scope": "#/properties/hobbies",
+            "options": {
+                "placeholder": "Type a hobby and press Enter"
+            }
+        }
+    ]
 };
-export const initialData1 = {};
+
+export const initialData1 = {
+    hobbies: ""
+};
