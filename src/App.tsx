@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import ProLayout from '@ant-design/pro-layout';
-import { Layout, Button, Drawer, List, Typography } from 'antd';
-import {UserOutlined, TeamOutlined, PlusOutlined, EnvironmentOutlined, LaptopOutlined  } from '@ant-design/icons';
+import { Layout, Button, Drawer, List, Typography, Flex } from 'antd';
+import { UserOutlined, TeamOutlined, PlusOutlined, EnvironmentOutlined, LaptopOutlined, HomeOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import 'antd/dist/reset.css';
 import { JsonForms } from '@jsonforms/react';
 import { materialRenderers } from '@jsonforms/material-renderers';
 
 import { schema1Basic, schema1Address, schema1Additional, uischema1Basic, uischema1Additional, uischema1Address, initialData1 } from './schemas/schema1';
 import { schema2JobDetails, schema2Manager, uischema2JobDetails, uischema2Manager, initialData2 } from './schemas/schema2';
-import {UISchemaElement} from "@jsonforms/core";
+import { UISchemaElement } from '@jsonforms/core';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -28,29 +28,30 @@ const formSchemas: FormSchema[] = [
     {
         title: 'Personal information',
         categories: [
-            { label: 'Basic', schema: schema1Basic, uiSchema: uischema1Basic, initialData: initialData1,  icon: <UserOutlined />},
-            { label: 'Address', schema: schema1Address, uiSchema: uischema1Address, initialData: initialData1, icon: <EnvironmentOutlined/> },
-            { label: 'Additional', schema: schema1Additional, uiSchema: uischema1Additional, initialData: initialData1, icon: <PlusOutlined/> },
+            { label: 'Basic', schema: schema1Basic, uiSchema: uischema1Basic, initialData: initialData1, icon: <UserOutlined /> },
+            { label: 'Address', schema: schema1Address, uiSchema: uischema1Address, initialData: initialData1, icon: <EnvironmentOutlined /> },
+            { label: 'Additional', schema: schema1Additional, uiSchema: uischema1Additional, initialData: initialData1, icon: <PlusOutlined /> },
         ],
     },
     {
-        title: 'Job',
+        title: 'Professional information',
         categories: [
-            { label: 'Job Details', schema: schema2JobDetails, uiSchema: uischema2JobDetails, initialData: initialData2, icon: <LaptopOutlined/> },
-            { label: 'Management', schema: schema2Manager, uiSchema: uischema2Manager, initialData: initialData2, icon: <TeamOutlined/> },
+            { label: 'Job Details', schema: schema2JobDetails, uiSchema: uischema2JobDetails, initialData: initialData2, icon: <LaptopOutlined /> },
+            { label: 'Management', schema: schema2Manager, uiSchema: uischema2Manager, initialData: initialData2, icon: <TeamOutlined /> },
         ],
     },
 ];
 
 const App: React.FC = () => {
-    const [drawerOpen, setDrawerOpen] = useState(true);
+    const [drawerOpen, setDrawerOpen] = useState(false);
     const [activeFormIndex, setActiveFormIndex] = useState(0);
     const [activeCategoryIndexes, setActiveCategoryIndexes] = useState<number[]>(new Array(formSchemas.length).fill(0));
+    const [showIntro, setShowIntro] = useState(true);
 
-    // saving form data
     const [formData, setFormData] = useState(
         formSchemas.map((form) => form.categories.map((category) => ({ ...category.initialData })))
     );
+
     const handleChange = (newData: any) => {
         const updatedData = [...formData];
         updatedData[activeFormIndex][activeCategoryIndexes[activeFormIndex]] = newData;
@@ -58,11 +59,11 @@ const App: React.FC = () => {
     };
 
     const handleCategorySelect = (formIndex: number, categoryIndex: number) => {
+        setShowIntro(false);
         setActiveFormIndex(formIndex);
         const newCategoryIndexes = [...activeCategoryIndexes];
         newCategoryIndexes[formIndex] = categoryIndex;
         setActiveCategoryIndexes(newCategoryIndexes);
-        //setDrawerOpen(false);
     };
 
     const activeForm = formSchemas[activeFormIndex];
@@ -74,21 +75,52 @@ const App: React.FC = () => {
             layout="top"
             siderWidth={0}
             contentStyle={{ padding: 20, transition: 'margin-left 0.3s ease' }}
+
+            headerContentRender={() => (
+                <Flex align="left" style={{ width: '100%', justifyContent: 'center' }}>
+                    <span></span>
+                    {!showIntro ? (
+                        <Title level={4} style={{ margin: 0, color: '#2d4e98' }}>
+                            {activeForm.title}
+                        </Title>
+                    ) : (
+                        <Title level={4} style={{ margin: 0, color: '#2d4e98' }}>
+                            Home
+                        </Title>
+                    )}
+                </Flex>
+            )}
+
         >
             <Layout style={{ display: 'flex', flexDirection: 'row' }}>
                 <Drawer
-                    title="My drawer"
+                    title={
+                        <Flex justify="space-between" align="center">
+                            <h3>Menu</h3>
+                            {!showIntro && (
+                                <Button
+                                    type="primary"
+                                    icon={<HomeOutlined />}
+                                    onClick={() => {
+                                        setShowIntro(true);
+                                        setDrawerOpen(false);
+                                    }}
+                                    style={{ backgroundColor: '#3d5b95' }}
+                                />
+                            )}
+                        </Flex>
+                    }
                     placement="left"
                     mask={false}
                     closable
                     onClose={() => setDrawerOpen(false)}
                     open={drawerOpen}
                     width={320}
-                    style={{ backgroundColor: '#c9e9ea' }}
+                    style={{ backgroundColor: '#d9deef' }}
                 >
                     {formSchemas.map((form, formIndex) => (
                         <div key={formIndex} style={{ marginBottom: 20 }}>
-                            <Title level={4} style={{ color: '#1677ff' }}>
+                            <Title level={4} style={{ color: '#2d4e98' }}>
                                 {form.title}
                             </Title>
 
@@ -108,10 +140,7 @@ const App: React.FC = () => {
                                         }}
                                         onClick={() => handleCategorySelect(formIndex, categoryIndex)}
                                     >
-                                        <List.Item.Meta
-                                            avatar={category.icon}
-                                            title={category.label}
-                                        />
+                                        <List.Item.Meta avatar={category.icon} title={category.label} />
                                     </List.Item>
                                 )}
                             />
@@ -127,20 +156,33 @@ const App: React.FC = () => {
                         transition: 'all 0.3s ease',
                     }}
                 >
-
-                    {!drawerOpen && (
-                        <Button type="primary" onClick={() => setDrawerOpen(true)} style={{ marginBottom: 20 }}>
+                    {!drawerOpen && !showIntro && (
+                        <Button type="primary" onClick={() => setDrawerOpen(true)} style={{ marginBottom: 20 , backgroundColor: '#3d5b95' }} >
                             Open drawer
                         </Button>
                     )}
 
-                    <JsonForms
-                        schema={activeCategory.schema}
-                        uischema={activeCategory.uiSchema}
-                        data={formData[activeFormIndex][activeCategoryIndexes[activeFormIndex]]}
-                        onChange={({data})=>handleChange(data)}
-                        renderers={materialRenderers}
-                    />
+                    {showIntro ? (
+                        <div style={{ textAlign: 'center', paddingTop: '10%' }}>
+                            <Title level={1} style={{ color: '#2d4e98' }}>Welcome to the Management Interface</Title>
+                            <h2>Manage your personal and professional information easily !</h2>
+                            <Button type="primary" size="large" onClick={() => setDrawerOpen(true)} style={{ backgroundColor: '#3d5b95' , marginTop: '200px'}}>
+                                Get Started
+                            </Button>
+                        </div>
+
+                    ) : (
+                        <>
+                            <Title level={1} style={{ color: '#2d4e98' }}>{activeCategory.label}</Title>
+                            <JsonForms
+                                schema={activeCategory.schema}
+                                uischema={activeCategory.uiSchema}
+                                data={formData[activeFormIndex][activeCategoryIndexes[activeFormIndex]]}
+                                onChange={({ data }) => handleChange(data)}
+                                renderers={materialRenderers}
+                            />
+                        </>
+                    )}
                 </Content>
             </Layout>
         </ProLayout>
