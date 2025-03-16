@@ -98,7 +98,11 @@ const App: React.FC = () => {
                 <Drawer
                     title={
                         <Flex justify="space-between" align="center">
-                            <h3>Menu</h3>
+                            {isMobile ? (
+                                <h4>Menu</h4>
+                                ) : (
+                                <h2>Menu</h2>
+                            )}
                             {!showIntro && (
                                 <Button
                                     type="primary"
@@ -153,7 +157,7 @@ const App: React.FC = () => {
                 <Content
                     style={{
                         flex: 1,
-                        marginLeft: isMobile ? 40 : drawerOpen ? 320 : 0,
+                        marginLeft: isMobile && drawerOpen ? 200 : drawerOpen ? 320 : 0,
                         width: isMobile ? `calc(100% - ${drawerOpen ? 40 : 0}vw)` : `calc(100% - ${drawerOpen ? 320 : 0}px)`,
                         transition: 'all 0.3s ease',
                     }}
