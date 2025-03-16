@@ -112,11 +112,12 @@ const App: React.FC = () => {
                                 setShowIntro(true);
                                 setDrawerOpen(false);
                             }}
+                            onCloseDrawer={() => setDrawerOpen(false)}
                         />
                     }
                     placement="left"
                     mask={false}
-                    closable
+                    closable={false}
                     onClose={() => setDrawerOpen(false)}
                     open={drawerOpen}
                     width={isMobile ? '40vw' : 320}
