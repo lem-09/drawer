@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import ProLayout from '@ant-design/pro-layout';
-import { Layout, Button, Drawer, List, Typography, Flex, Grid } from 'antd';
-import { UserOutlined, TeamOutlined, PlusOutlined, EnvironmentOutlined, LaptopOutlined, HomeOutlined } from '@ant-design/icons';
+import { Layout, Button, Drawer, Flex, Grid } from 'antd';
+import { UserOutlined, TeamOutlined, PlusOutlined, EnvironmentOutlined, LaptopOutlined } from '@ant-design/icons';
 import 'antd/dist/reset.css';
-import { JsonForms } from '@jsonforms/react';
-import { materialRenderers } from '@jsonforms/material-renderers';
 
 import { schema1Basic, schema1Address, schema1Additional, uischema1Basic, uischema1Additional, uischema1Address, initialData1 } from './schemas/schema1';
 import { schema2JobDetails, schema2Manager, uischema2JobDetails, uischema2Manager, initialData2 } from './schemas/schema2';
 import { UISchemaElement } from '@jsonforms/core';
 
+import FormRenderer from './categorization/FormRenderer';
+import HomePage from './categorization/HomePage';
+import DrawerContent from './categorization/DrawerContent';
+import Title from "antd/lib/typography/Title";
+
 const { Content } = Layout;
-const { Title } = Typography;
 const { useBreakpoint } = Grid;
 
 type FormCategory = {
@@ -21,7 +23,7 @@ type FormCategory = {
     initialData: any;
     icon: React.ReactNode;
 };
-type FormSchema = {
+export type FormSchema = {
     title: string;
     categories: FormCategory[];
 };
@@ -101,20 +103,16 @@ const App: React.FC = () => {
             <Layout style={{ display: 'flex', flexDirection: 'row' }}>
                 <Drawer
                     title={
-                        <Flex justify="space-between" align="center">
-                            <h4>Menu</h4>
-                            {!showIntro && (
-                                <Button
-                                    type="primary"
-                                    icon={<HomeOutlined />}
-                                    onClick={() => {
-                                        setShowIntro(true);
-                                        setDrawerOpen(false);
-                                    }}
-                                    style={{ backgroundColor: '#3d5b95' }}
-                                />
-                            )}
-                        </Flex>
+                        <DrawerContent
+                            formSchemas={formSchemas}
+                            activeFormIndex={activeFormIndex}
+                            activeCategoryIndexes={activeCategoryIndexes}
+                            onCategorySelect={handleCategorySelect}
+                            onHomeClick={() => {
+                                setShowIntro(true);
+                                setDrawerOpen(false);
+                            }}
+                        />
                     }
                     placement="left"
                     mask={false}
@@ -123,36 +121,7 @@ const App: React.FC = () => {
                     open={drawerOpen}
                     width={isMobile ? '40vw' : 320}
                     style={{ backgroundColor: '#d9deef' }}
-                >
-                    {formSchemas.map((form, formIndex) => (
-                        <div key={formIndex} style={{ marginBottom: 20 }}>
-                            <Title level={isMobile ? 5 : 4} style={{ color: '#2d4e98' }}>
-                                {form.title}
-                            </Title>
-
-                            <List
-                                itemLayout="horizontal"
-                                dataSource={form.categories}
-                                renderItem={(category, categoryIndex) => (
-                                    <List.Item
-                                        style={{
-                                            padding: '8px 16px',
-                                            cursor: 'pointer',
-                                            background:
-                                                activeFormIndex === formIndex && activeCategoryIndexes[formIndex] === categoryIndex
-                                                    ? '#e6f4ff'
-                                                    : 'transparent',
-                                            borderRadius: 8,
-                                        }}
-                                        onClick={() => handleCategorySelect(formIndex, categoryIndex)}
-                                    >
-                                        <List.Item.Meta avatar={category.icon} title={category.label} />
-                                    </List.Item>
-                                )}
-                            />
-                        </div>
-                    ))}
-                </Drawer>
+                />
 
                 <Content
                     style={{
@@ -170,22 +139,15 @@ const App: React.FC = () => {
                     )}
 
                     {showIntro ? (
-                        <div style={{ textAlign: 'center', paddingTop: '10%' }}>
-                            <Title level={isMobile ? 4 : 1} style={{ color: '#2d4e98' }}>Welcome to the Management Interface</Title>
-                            <h2>Manage your personal and professional information easily!</h2>
-                            <Button type="primary" size="large" onClick={() => setDrawerOpen(true)} style={{ backgroundColor: '#3d5b95', marginTop: '50px' }}>
-                                Get Started
-                            </Button>
-                        </div>
+                        <HomePage onGetStarted={() => setDrawerOpen(true)} />
                     ) : (
                         <>
                             <Title level={isMobile ? 4 : 1} style={{ color: '#2d4e98' }}>{activeCategory.label}</Title>
-                            <JsonForms
+                            <FormRenderer
                                 schema={activeCategory.schema}
-                                uischema={activeCategory.uiSchema}
+                                uiSchema={activeCategory.uiSchema}
                                 data={formData[activeFormIndex][activeCategoryIndexes[activeFormIndex]]}
-                                onChange={({ data }) => handleChange(data)}
-                                renderers={materialRenderers}
+                                onChange={handleChange}
                             />
                         </>
                     )}
