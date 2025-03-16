@@ -80,8 +80,12 @@ const App: React.FC = () => {
             layout="top"
             siderWidth={0}
             contentStyle={{ padding: 20, transition: 'margin-left 0.3s ease' }}
+            menuRender={false}
             headerContentRender={() => (
-                <Flex align="center" style={{ width: '100%', justifyContent: 'center' }}>
+                <Flex
+                    align={isMobile ? 'start' : 'center'}
+                    style={isMobile ? { width: '100%', justifyContent: 'right' } : { width: '100%', justifyContent: 'center' }}
+                >
                     {!showIntro ? (
                         <Title level={isMobile ? 5 : 4} style={{ margin: 0, color: '#2d4e98' }}>
                             {activeForm.title}
@@ -158,6 +162,13 @@ const App: React.FC = () => {
                         transition: 'all 0.3s ease',
                     }}
                 >
+
+                    {!drawerOpen && !showIntro && (
+                        <Button type="primary" onClick={() => setDrawerOpen(true)} style={{ marginBottom: 20, backgroundColor: '#3d5b95' }}>
+                            Open drawer
+                        </Button>
+                    )}
+
                     {showIntro ? (
                         <div style={{ textAlign: 'center', paddingTop: '10%' }}>
                             <Title level={isMobile ? 4 : 1} style={{ color: '#2d4e98' }}>Welcome to the Management Interface</Title>
